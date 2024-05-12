@@ -19,6 +19,49 @@ namespace ProductApp_Product.Controllers
         }
 
 
+
+        [HttpGet]
+        public IActionResult GetProduct()
+        {
+            List<Product> products = new List<Product>();
+
+            try
+            {
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string sql = "SELECT * FROM products";
+                    using (var command = new SqlCommand(sql, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Product product = new Product();
+
+                                product.Id = reader.GetInt32(0);
+                                product.Name = reader.GetString(1);
+                                product.Brand = reader.GetString(2);
+                                product.Category = reader.GetString(3);
+                                product.Price = reader.GetDecimal(4);
+                                product.Description = reader.GetString(5);
+                                product.CreatedAt = reader.GetDateTime(6);
+                                products.Add(product);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Product", "Sorry,But we Have an Exception");
+                return BadRequest(ModelState);
+            }
+            return Ok(products);
+        }
+
+
         [HttpPost]
         public IActionResult CreateProduct(ProductDto productDto)
         {
@@ -55,52 +98,7 @@ namespace ProductApp_Product.Controllers
         }
 
 
-        [HttpGet]
-        public IActionResult GetProduct()
-        {
-            List<Product> products = new List<Product>();
 
-            try
-            {
-                using (var connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-
-                    string sql = "SELECT * FROM products";
-                    using (var command = new SqlCommand(sql, connection))
-                    {
-                        using (var reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                Product product = new Product();
-
-                                product.Id = reader.GetInt32(0);
-                                product.Name = reader.GetString(1);
-                                product.Brand = reader.GetString(2);
-                                product.Category = reader.GetString(3);
-                                product.Price = reader.GetDecimal(4);
-                                product.Description = reader.GetString(5);
-                                product.CreatedAt = reader.GetDateTime(6);
-
-                                products.Add(product);
-                            }
-                        }
-                    }
-                }
-            }
-
-
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("Product", "Sorry,But we Have an Exception");
-                return BadRequest(ModelState);
-            }
-
-
-
-            return Ok(products);
-        }
 
 
 
