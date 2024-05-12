@@ -61,8 +61,8 @@ namespace ProductApp_Product.Controllers
             return Ok(products);
         }
 
-
         [HttpPost]
+        [Route("api/products/create")]
         public IActionResult CreateProduct(ProductDto productDto)
         {
             try
