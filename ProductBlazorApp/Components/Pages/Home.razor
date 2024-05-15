@@ -1,8 +1,6 @@
 ﻿@using System.Net.Http
 @using System.Text.Json
 @using System.Text
-
-
 @page "/"
 @rendermode InteractiveServer
 @inject HttpClient HttpClient
@@ -82,69 +80,4 @@
 </div>
 
 
- @code {
-    private string apiUrl = "https://localhost:7295/api/Products/api/products/create";
-    private List<Product> Products { get; set; } = new List<Product>();
-    private ProductDto NewProduct = new ProductDto();
-    private bool showSuccessMessage = false;
 
-    private async Task CreateProduct()
-    {
-        try
-        {
-            var json = JsonSerializer.Serialize(NewProduct);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await HttpClient.PostAsync(apiUrl, content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                 
-                showSuccessMessage = true;
-                NewProduct = new ProductDto();  
-                await FetchData();  
-            }
-            else
-            {
-                var errorMessage = await response.Content.ReadAsStringAsync();
-       
-            }
-        }
-        catch (Exception ex)
-        {
- 
-        }
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await FetchData();
-    }
-
-    public HttpClient httpClient = new HttpClient();
-
-    public async Task FetchData()
-    {
-        Products = await httpClient.GetFromJsonAsync<List<Product>>("https://localhost:7295/api/products");
-    }
-
-    public class ProductDto
-    {
-        public string Name { get; set; }
-        public string Brand { get; set; }
-        public string Category { get; set; }
-        public decimal Price { get; set; }
-        public string Description { get; set; }
-    }
-
-    public class Product
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = "";
-        public string Brand { get; set; } = "";
-        public string Category { get; set; } = "";
-        public decimal Price { get; set; }
-        public string Description { get; set; } = "";
-        public DateTime CreatedAt { get; set; }
-    }
-}
