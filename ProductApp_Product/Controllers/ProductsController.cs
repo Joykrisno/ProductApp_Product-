@@ -80,7 +80,6 @@ namespace ProductApp_Product.Controllers
                         command.Parameters.AddWithValue("@category", productDto.Category);
                         command.Parameters.AddWithValue("@price", productDto.Price);
                         command.Parameters.AddWithValue("@description", productDto.Description);
-
                         command.ExecuteNonQuery();
                     }
                 }
@@ -93,7 +92,7 @@ namespace ProductApp_Product.Controllers
 
 
 
-            return Ok();
+            return Ok(productDto);
 
         }
 
@@ -159,7 +158,7 @@ namespace ProductApp_Product.Controllers
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string sql = @"UPDATE products SET name = @name,brand = @brand,  category = @category, price = @price, description = @description WHERE id = @id";
+                    string sql = "UPDATE products SET name = @name,brand = @brand,  category = @category, price = @price, description = @description WHERE id = @id";
 
                     using (var command = new SqlCommand(sql,connection))
                     {

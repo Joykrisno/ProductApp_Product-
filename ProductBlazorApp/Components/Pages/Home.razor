@@ -33,9 +33,13 @@
             <label>Description</label>
             <input @bind="NewProduct.Description" class="form-control" type="text" />
         </div>
+
+        <div class="col-md-4">
+        <button class="btn btn-primary mt-3" @onclick="CreateProduct">Save</button>
+        </div>
     </div>
 
-    <button class="btn btn-primary mt-3" @onclick="CreateProduct">Create</button>
+
 
     @if (showSuccessMessage)
     {
@@ -54,6 +58,7 @@
                         <th>Category</th>
                         <th>Price</th>
                         <th>Description</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -65,6 +70,9 @@
                             <td>@product.Category</td>
                             <td>@product.Price</td>
                             <td>@product.Description</td>
+                            <td>
+                                <button class="btn btn-primary" type="button">Edit</button>
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -73,8 +81,9 @@
     </div>
 </div>
 
-@code {
-    private string apiUrl = "https://localhost:7295/api/products/create";
+
+ @code {
+    private string apiUrl = "https://localhost:7295/api/Products/api/products/create";
     private List<Product> Products { get; set; } = new List<Product>();
     private ProductDto NewProduct = new ProductDto();
     private bool showSuccessMessage = false;

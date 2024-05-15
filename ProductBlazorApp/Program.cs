@@ -1,12 +1,11 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+
 using ProductBlazorApp.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+   .AddInteractiveServerComponents();
 builder.Services.AddHttpClient();
 
 var app = builder.Build();
@@ -20,7 +19,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 
-app.MapControllers();
 
 
 app.UseHttpsRedirection();
