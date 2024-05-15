@@ -1,6 +1,7 @@
 ﻿@using System.Net.Http
 @using System.Text.Json
 @using System.Text
+
 @page "/"
 @rendermode InteractiveServer
 @inject HttpClient HttpClient
@@ -8,6 +9,7 @@
 <PageTitle>Product - List</PageTitle>
 <div class="container">
     <h3>Create Product</h3>
+    <input id="id" hidden />
     <div class="row">
         <div class="col-md-4">
             <label>Name</label>
@@ -27,13 +29,18 @@
             <label>Price</label>
             <input @bind="NewProduct.Price" class="form-control" type="number" step="0.01" />
         </div>
+
         <div class="col-md-4">
             <label>Description</label>
             <input @bind="NewProduct.Description" class="form-control" type="text" />
         </div>
 
         <div class="col-md-4">
+            <span>
         <button class="btn btn-primary mt-3" @onclick="CreateProduct">Save</button>
+
+                <button class="btn btn-primary mt-3">Update</button>
+            </span>
         </div>
     </div>
 
@@ -69,10 +76,12 @@
                             <td>@product.Price</td>
                             <td>@product.Description</td>
                             <td>
-                                <button class="btn btn-primary" type="button">Edit</button>
+                                <button class="btn btn-primary" @onclick="() => EditProduct(product.Id)" type="button">Edit</button>
+
                             </td>
                         </tr>
                     }
+
                 </tbody>
             </table>
         </div>

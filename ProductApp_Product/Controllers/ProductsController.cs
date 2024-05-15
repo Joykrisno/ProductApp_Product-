@@ -97,11 +97,6 @@ namespace ProductApp_Product.Controllers
         }
 
 
-
-
-
-
-
         [HttpGet("{id}")]
         public IActionResult GetProductId(int id)
         {
@@ -150,6 +145,7 @@ namespace ProductApp_Product.Controllers
 
 
         [HttpPut]
+        [Route("api/product/update")]
         public IActionResult UpdateProduct(int id,ProductDto productDto)
         {
 

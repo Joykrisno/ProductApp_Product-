@@ -5,11 +5,16 @@ namespace ProductBlazorApp.Components.Pages
 {
     public partial class Home
     {
+     
 
         public string apiUrl = "https://localhost:7295/api/Products/api/products/create";
+        protected ProductDto SelectedProduct { get; set; } = new ProductDto();
+
         public List<Product> Products { get; set; } = new List<Product>();
+
         public ProductDto NewProduct = new ProductDto();
         public bool showSuccessMessage = false;
+
 
         public async Task CreateProduct()
         {
@@ -38,6 +43,48 @@ namespace ProductBlazorApp.Components.Pages
 
             }
         }
+
+
+
+
+        public async Task EditProduct(int productId)
+        {
+            try
+            {
+                 
+                var response = await HttpClient.GetAsync($"https://localhost:7295/api/products/{productId}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var productJson = await response.Content.ReadAsStringAsync();
+                    SelectedProduct = JsonSerializer.Deserialize<ProductDto>(productJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                  
+                    NewProduct = new ProductDto
+                    {
+                        Name = SelectedProduct.Name,
+                        Brand = SelectedProduct.Brand,
+                        Category = SelectedProduct.Category,
+                        Price = SelectedProduct.Price,
+                        Description = SelectedProduct.Description
+                    };
+                }
+                else
+                {
+              
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
+
+
+
+
 
         protected override async Task OnInitializedAsync()
         {
