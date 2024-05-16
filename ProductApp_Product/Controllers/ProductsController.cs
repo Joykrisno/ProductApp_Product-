@@ -163,7 +163,7 @@ namespace ProductApp_Product.Controllers
                         command.Parameters.AddWithValue("@category", productDto.Category);
                         command.Parameters.AddWithValue("@price", productDto.Price);
                         command.Parameters.AddWithValue("@description", productDto.Description);
-                        command.Parameters.AddWithValue("@id", id);
+                        command.Parameters.AddWithValue("@id",id);
                         command.ExecuteNonQuery();
                     }
 
@@ -176,6 +176,36 @@ namespace ProductApp_Product.Controllers
 
             return Ok();
         }
+
+
+
+        [HttpDelete]
+        [Route("api/product/delete/{id}")]
+        public IActionResult DeleteProduct(int id)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string sql = "DELETE FROM products WHERE id = @id";
+
+                    using (var command = new SqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@id", id);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Product", "Sorry, but we encountered an exception");
+                return BadRequest(ModelState);
+            }
+
+            return Ok();
+        }
+
 
 
 

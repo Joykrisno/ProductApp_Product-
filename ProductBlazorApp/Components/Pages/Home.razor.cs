@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text;
+using System.Net;
 
 namespace ProductBlazorApp.Components.Pages
 {
@@ -8,13 +9,15 @@ namespace ProductBlazorApp.Components.Pages
      
 
         public string apiUrl = "https://localhost:7295/api/Products/api/products/create";
+        public string apiUrlUpdate = "https://localhost:7295/api/Products/api/products/update";
         protected ProductDto SelectedProduct { get; set; } = new ProductDto();
 
         public List<Product> Products { get; set; } = new List<Product>();
 
         public ProductDto NewProduct = new ProductDto();
         public bool showSuccessMessage = false;
-
+        private bool showUpdateSuccessMessage = false;
+        private string successMessage;
 
         public async Task CreateProduct()
         {
@@ -44,6 +47,67 @@ namespace ProductBlazorApp.Components.Pages
             }
         }
 
+  
+ 
+
+
+
+
+        public async Task DeleteProduct(int id)
+        {
+            try
+            {
+                var response = await HttpClient.DeleteAsync($"https://localhost:7295/api/Products/api/product/delete/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    await FetchData();
+                }
+                else
+                {
+                    // Handle error
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exception
+            }
+        }
+
+
+
+        public async Task UpdateProduct()
+        {
+            try
+            {
+                 
+                var json = JsonSerializer.Serialize(NewProduct);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+ 
+                var updatedProduct = JsonSerializer.Deserialize<ProductDto>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });               
+                var response = await HttpClient.PutAsync($"https://localhost:7295/api/Products/api/product/update?id={NewProduct.Id}", content);
+
+
+                if (response.IsSuccessStatusCode)
+                {
+                     
+                    showUpdateSuccessMessage = true;
+
+                    
+                    await FetchData();
+                }
+                else
+                {
+                   
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                  
+                }
+            }
+            catch (Exception ex)
+            {
+                 
+            }
+        }
 
 
 
@@ -51,7 +115,6 @@ namespace ProductBlazorApp.Components.Pages
         {
             try
             {
-                 
                 var response = await HttpClient.GetAsync($"https://localhost:7295/api/products/{productId}");
 
                 if (response.IsSuccessStatusCode)
@@ -59,9 +122,10 @@ namespace ProductBlazorApp.Components.Pages
                     var productJson = await response.Content.ReadAsStringAsync();
                     SelectedProduct = JsonSerializer.Deserialize<ProductDto>(productJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-                  
+                    
                     NewProduct = new ProductDto
                     {
+                        Id = productId,
                         Name = SelectedProduct.Name,
                         Brand = SelectedProduct.Brand,
                         Category = SelectedProduct.Category,
@@ -71,17 +135,15 @@ namespace ProductBlazorApp.Components.Pages
                 }
                 else
                 {
-              
                     var errorMessage = await response.Content.ReadAsStringAsync();
-                    
+                    // Handle error
                 }
             }
             catch (Exception ex)
             {
-                
+                // Handle exception
             }
         }
-
 
 
 
@@ -92,6 +154,7 @@ namespace ProductBlazorApp.Components.Pages
         }
 
         public HttpClient httpClient = new HttpClient();
+        private string errorMessage;
 
         public async Task FetchData()
         {
@@ -104,6 +167,7 @@ namespace ProductBlazorApp.Components.Pages
 
         public class ProductDto
         {
+            public int Id { get; set; }
             public string Name { get; set; }
             public string Brand { get; set; }
             public string Category { get; set; }
