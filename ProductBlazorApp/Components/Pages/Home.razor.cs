@@ -65,12 +65,12 @@ namespace ProductBlazorApp.Components.Pages
                 }
                 else
                 {
-                    // Handle error
+                    
                 }
             }
             catch (Exception ex)
             {
-                // Handle exception
+                
             }
         }
 
@@ -136,12 +136,12 @@ namespace ProductBlazorApp.Components.Pages
                 else
                 {
                     var errorMessage = await response.Content.ReadAsStringAsync();
-                    // Handle error
+                     
                 }
             }
             catch (Exception ex)
             {
-                // Handle exception
+                 
             }
         }
 
