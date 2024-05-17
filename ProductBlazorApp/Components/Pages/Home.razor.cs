@@ -92,8 +92,8 @@ namespace ProductBlazorApp.Components.Pages
                 {
                      
                     showUpdateSuccessMessage = true;
-
                     
+
                     await FetchData();
                 }
                 else
