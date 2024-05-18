@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text;
 using System.Net;
+using Microsoft.JSInterop;
 
 namespace ProductBlazorApp.Components.Pages
 {
@@ -34,6 +35,8 @@ namespace ProductBlazorApp.Components.Pages
                     showSuccessMessage = true;
                     NewProduct = new ProductDto();
                     await FetchData();
+                    showUpdateSuccessMessage = true;
+                    await JSRuntime.InvokeVoidAsync("showAlert", "Data Create successfully!");
                 }
                 else
                 {
@@ -61,6 +64,8 @@ namespace ProductBlazorApp.Components.Pages
 
                 if (response.IsSuccessStatusCode)
                 {
+                    showUpdateSuccessMessage = true;
+                    await JSRuntime.InvokeVoidAsync("showAlert", "Data Delete successfully");
                     await FetchData();
                 }
                 else
@@ -92,9 +97,10 @@ namespace ProductBlazorApp.Components.Pages
                 {
                      
                     showUpdateSuccessMessage = true;
-                    
-
+                    await JSRuntime.InvokeVoidAsync("showAlert", "Data updated successfully!");
+                    NewProduct = new ProductDto();
                     await FetchData();
+
                 }
                 else
                 {

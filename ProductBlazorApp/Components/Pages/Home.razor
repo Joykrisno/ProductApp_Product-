@@ -4,6 +4,8 @@
 @using System.Text.Json
 @using System.Text
 @inject HttpClient HttpClient
+@inject IJSRuntime JSRuntime
+
 
 <PageTitle>Product - List</PageTitle>
 <div class="container">
@@ -42,20 +44,23 @@
         </div>
     </div>
 
-    @if (showSuccessMessage)
+
+
+@*     @if (showSuccessMessage)
     {
         <div class="alert alert-success mt-3" role="alert">
             Product saved successfully!
         </div>
-    }
+    } *@
 
-    @if (showUpdateSuccessMessage)
-    {
-        <div class="alert alert-success mt-3" role="alert">
-            Product updated successfully!
+    <div class="row mt-3">
+        <div class="col-md-9">
+           
         </div>
-    }
-
+        <div class="col-md-3">
+            <input id="searchInput" class="form-control" type="text" placeholder="Search...">
+        </div>
+    </div>
     <div class="row mt-3">
  
             <table id="productTable" class="table">
@@ -90,21 +95,42 @@
       
     </div>
 </div>
- 
 
-<!-- DataTables CSS -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-
-<!-- jQuery -->
-<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-
-<!-- DataTables JS -->
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
  
 
 <script>
-    $(document).ready(function () {
-        $('#productTable').DataTable();
-    });
+    function showAlert(message) {
+        alert(message);
+    }
+
+   // CopyGoogleCodeSearch-Start
+
+    // JavaScript function to handle filtering
+    function filterTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("productTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            for (var j = 0; j < td.length; j++) {
+                if (td[j]) {
+                    txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                        break;
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    }
+
+    // Event listener for input change
+    document.getElementById("searchInput").addEventListener("input", filterTable);
+
+    // CopyGoogleCodeSearch-End
 </script>
