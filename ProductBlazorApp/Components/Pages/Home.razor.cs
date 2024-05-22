@@ -93,6 +93,7 @@ namespace ProductBlazorApp.Components.Pages
                 var response = await HttpClient.PutAsync($"https://localhost:7295/api/Products/api/product/update?id={NewProduct.Id}", content);
 
 
+
                 if (response.IsSuccessStatusCode)
                 {
                      
@@ -165,6 +166,14 @@ namespace ProductBlazorApp.Components.Pages
         public async Task FetchData()
         {
             Products = await httpClient.GetFromJsonAsync<List<Product>>("https://localhost:7295/api/products");
+
+
+            //if (Products != null)
+            //{
+            //    Products = Products.OrderByDescending(J => J.CreatedAt).ToList();
+            //}
+
+
         }
 
 
